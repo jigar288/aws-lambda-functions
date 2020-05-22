@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Lambda application that calls the Lambda API.
+Resources:
+  UnsubscribeEmail:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/33007f09bacbc57b96e6620894eb497a
+      Handler: example.Handlers.UnsubscribeEmail
+      Runtime: java11
+      Description: Java function
+      MemorySize: 512
+      Timeout: 60
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambdaReadOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonSNSFullAccess
+      Tracing: Active
+  SubscribeEmail:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/33007f09bacbc57b96e6620894eb497a
+      Handler: example.Handlers.SubscribeEmail
+      Runtime: java11
+      Description: Java function
+      MemorySize: 512
+      Timeout: 60
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambdaReadOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonSNSFullAccess
+      Tracing: Active
+  WriteToDatabase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/33007f09bacbc57b96e6620894eb497a
+      Handler: example.Handlers.WriteToDatabase
+      Runtime: java11
+      Description: Java function
+      MemorySize: 512
+      Timeout: 60
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambdaReadOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonDynamoDBFullAccess
+      - AmazonSNSFullAccess
+      Tracing: Active
+  GetItem:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/33007f09bacbc57b96e6620894eb497a
+      Handler: example.Handlers.GetItem
+      Runtime: java11
+      Description: Java function
+      MemorySize: 512
+      Timeout: 60
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambdaReadOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+  ReadDatabase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/33007f09bacbc57b96e6620894eb497a
+      Handler: example.Handlers.ReadDatabase
+      Runtime: java11
+      Description: Java function
+      MemorySize: 512
+      Timeout: 60
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambdaReadOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
