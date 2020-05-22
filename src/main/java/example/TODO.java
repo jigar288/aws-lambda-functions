@@ -16,6 +16,10 @@ package example;
 
       * Refractor 
         ! NOTE: not all of this is necessary --> find tasks where you really learn
+        - **** return proper info *** --> 
+            - check if data should be returned
+            - status code --> on failure return  & on success if no data is returned
+        - make repeated vars as class fields --> DRY
         - read through fixme statements
         - think of ways to refractor code --> shouldn't have to refractor next time
         - add modifiers where necessary (final, private, protected)
@@ -37,7 +41,22 @@ package example;
         - performance --> caching, load balancing for more traffic 
         - security --> authorization & authintication 
         - testability --> write unit tests for routes --> helps you discover edge cases
+
+      !EFFICIENCY TACTICS
+       - avoid repeatitive patterns --> deploy, test, deploy, test, deploy, test
+       - chunk everything --> deploy once & test everything all at once
+
+       * TEST: cases to test for 
+       * - subscribe & unsubscribe email input
+       * - DB read & write
+       * - send notification function
     
+      !COMMIT MESSAGES
+        - added request parameters 
+        - removed redundant code
+        - moved notifications in its own class
+        - added static methods where object instance was unnecessary
+
     */
 
 

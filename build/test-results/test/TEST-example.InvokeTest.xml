@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="example.InvokeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-22T05:24:19" hostname="Jigars-MacBook-Air.local" time="0.032">
+<testsuite name="example.InvokeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-22T19:11:02" hostname="Jigars-MacBook-Air.local" time="0.049">
   <properties/>
-  <testcase name="invokeTest()" classname="example.InvokeTest" time="0.032"/>
+  <testcase name="invokeTest()" classname="example.InvokeTest" time="0.049"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

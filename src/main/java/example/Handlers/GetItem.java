@@ -36,7 +36,4 @@ public class GetItem implements RequestHandler<Map<String, String> , JSONObject>
         return searchItem(CRN);
     }
 
-    
-      
-    
 }

@@ -14,12 +14,11 @@ public class SubscribeEmail implements RequestHandler<Map<String, Object>, Strin
     @Override
     public String handleRequest(Map<String, Object> event, Context context) {
 
-        // todo: get email from event object
+        final String email = (String) event.get("email"); //* getting req body
 
         //* subscribe via email
-        Notifications subscriber = new Notifications();
         String topicARN = "arn:aws:sns:us-east-1:796567501476:CourseNotificationTopic";
-        subscriber.subscribeUser("jigar@novusclub.org", topicARN);
+        Notifications.subscribeUser(email, topicARN);
 
         return "Is this the correct response???";
     }

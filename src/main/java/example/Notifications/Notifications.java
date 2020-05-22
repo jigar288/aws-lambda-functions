@@ -3,6 +3,8 @@ package example.Notifications;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.ListSubscriptionsByTopicResult;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.amazonaws.services.sns.model.SubscribeRequest;
 import com.amazonaws.services.sns.model.Subscription;
 import com.amazonaws.services.sns.model.UnsubscribeRequest;
@@ -16,7 +18,7 @@ public class Notifications {
     
     // ! email should be passed in from lambda event object
     // ! check validity of email & ARN before processing --> check if SDK handles it
-    public void subscribeUser(String email, String topicARN){
+    public static void subscribeUser(String email, String topicARN){
         //* reference to SNS client
         AmazonSNS snsClient = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
 
@@ -90,6 +92,21 @@ public class Notifications {
     
         //* send user subscription 
     }
+
+    // Publish a message to an Amazon SNS topic.
+    //! ARN & message should be parameters
+    public static void sendSNSNotifications(String subjectName, int CRN){
+                
+        AmazonSNS snsClient = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
+        final String msg = "If you receive this message, publishing a message to an Amazon SNS topic works: " + subjectName + " " + CRN;
+        final String topicArn = "arn:aws:sns:us-east-1:796567501476:CourseNotificationTopic";
+        final PublishRequest publishRequest = new PublishRequest(topicArn, msg);
+        final PublishResult publishResponse = snsClient.publish(publishRequest);
+
+        // Print the MessageId of the message.
+        System.out.println("MessageId: " + publishResponse.getMessageId());   
+
+    }    
     
 
 }
