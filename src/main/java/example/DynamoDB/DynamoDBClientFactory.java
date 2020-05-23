@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
@@ -15,13 +14,7 @@ import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
-import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import com.amazonaws.services.sns.model.PublishRequest;
-import com.amazonaws.services.sns.model.PublishResult;
-
 import org.json.simple.JSONObject;
-
 import example.Models.uicCoursesModel;
 import example.Notifications.Notifications;
 
@@ -36,18 +29,16 @@ public class DynamoDBClientFactory {
     private final Table table;
 
     public DynamoDBClientFactory(Regions databaseRegion, String profile, String tableName){
-        //! fixme - dont hardcode regions
         builder = AmazonDynamoDBClientBuilder.standard().withRegion(databaseRegion).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() );
         databaseInstance = new DynamoDB( builder.build() ); 
         table = databaseInstance.getTable(tableName); 
     }
 
-    public void makeDatabaseEntry(String subjectName, int CRN, DynamoDBClientFactory client, Map<String, Object> extraClassInfo){
+    public void makeDatabaseEntry(String subjectName, int CRN, Map<String, Object> extraClassInfo){
         
        uicCoursesModel uicClassObj = new uicCoursesModel(subjectName, CRN, extraClassInfo);
 
        try{
-
            //* getting a reference to the table -->  making an entry to the table
            PutItemOutcome outcomeObj = this.table.putItem(new Item().withPrimaryKey("courseName", uicClassObj.getCourseName(), "CRN", uicClassObj.getCRN()).withMap("class-info", extraClassInfo));
            System.out.println("Database entry outcome: " + outcomeObj.getPutItemResult());
@@ -57,17 +48,17 @@ public class DynamoDBClientFactory {
            System.err.println(e.getMessage());
        }
 
-
        //* sendSNSNotifications is a static method ClassName.methodName() is the way to invoke a static method
        //* sending out notifications for database entry
-       Notifications.sendSNSNotifications(subjectName, CRN);
+       Notifications notifObj = new Notifications(Regions.US_EAST_1);
+       notifObj.sendSNSNotifications(subjectName, CRN);
        
     }
 
     public ArrayList<JSONObject> queryDatabase(){
 
-        ScanSpec scanConditions = new ScanSpec().withProjectionExpression("courseName, CRN");
-        ArrayList<JSONObject> databaseJSONObj = new ArrayList<JSONObject>();
+        ScanSpec scanConditions = new ScanSpec().withProjectionExpression("courseName, CRN"); //* setting search conditions
+        ArrayList<JSONObject> databaseJSONObj = new ArrayList<JSONObject>(); //! convert to dependecy injection --> should be tested before & after method call
         
         try {
 
@@ -81,10 +72,10 @@ public class DynamoDBClientFactory {
 
                 Item oneItem = iterObj.next(); //* this gets the current item
             
+                //* converts to standard JSON
                 Map<String, Object> elements = oneItem.asMap();
                 JSONObject jsonItem = new JSONObject(elements);
                 databaseJSONObj.add(jsonItem);
-
             }
                                 
         } catch (Exception e) {
@@ -93,10 +84,9 @@ public class DynamoDBClientFactory {
         }
 
         return databaseJSONObj;
-
     }
 
-    public JSONObject searchClass(int CRN){
+    public JSONObject searchClassByCRN(int CRN){
 
         //* setting search conditions 
         GetItemSpec spec = new GetItemSpec().withPrimaryKey("courseName", "Computer Science", "CRN", CRN);

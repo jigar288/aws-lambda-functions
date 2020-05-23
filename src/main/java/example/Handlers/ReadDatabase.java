@@ -28,7 +28,6 @@ public class ReadDatabase implements RequestHandler<Map<String, String>, ArrayLi
 
   @Override
   public ArrayList<JSONObject> handleRequest(Map<String, String> event, Context context) {
-    //String response = new String("200 OK - read database");
 
     // * call the dynamoDB Client to read all items from the database
 

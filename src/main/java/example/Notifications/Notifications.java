@@ -15,26 +15,27 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 
 public class Notifications {
-    
-    // ! email should be passed in from lambda event object
-    // ! check validity of email & ARN before processing --> check if SDK handles it
-    public static void subscribeUser(String email, String topicARN){
-        //* reference to SNS client
-        AmazonSNS snsClient = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
 
+    final private AmazonSNS snsClient;
+
+    public Notifications(Regions NotificationsRegion){
+        //* creating reference to SNS client
+        snsClient = AmazonSNSClientBuilder.standard().withRegion(NotificationsRegion).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
+    }
+    
+    // * that way it forces you to supply region for subscription --> so that you can sub/unsub from the right region 
+    public void subscribeUser(String email, String topicARN){
+        
         // * subscribe an email endpoint to SNS
         final SubscribeRequest subscribeRequest = new SubscribeRequest(topicARN, "email", email );
 
         //* send user subscription 
-        snsClient.subscribe(subscribeRequest);
+        this.snsClient.subscribe(subscribeRequest);
 
         System.out.println("SubscribeRequest: " + snsClient.getCachedResponseMetadata(subscribeRequest));
-
-        //! parse the subscription result --> return as lambda function response
     }
 
     // * this function will return the sub-ARN as string. If not found it will stay null
-    //! code for null arn
     private String findSubscriptionARN(String email, String topicARN, AmazonSNS snsClient){
         String subscriptionARN = null; 
         ListSubscriptionsByTopicResult subList = snsClient.listSubscriptionsByTopic(topicARN);
@@ -53,51 +54,24 @@ public class Notifications {
 
     }
 
+    public void unsubscribeUser(String email, String topicARN){
 
-    //! pass in email from 
-    //! make a separate lambda function for this method
+        final String subscriptionARN = findSubscriptionARN(email, topicARN, this.snsClient); //* looking for user's info to perform unsubscription
 
-    //?  if possible --> 
-        //! return detailed error message on failure & using exceptions
-
-
-    public String unsubscribeUser(String email, String topicARN){
-
-        //* reference to SNS client & info for subscription
-        AmazonSNS snsClient = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
-
-        final String subscriptionARN = findSubscriptionARN(email, topicARN, snsClient); //* looking for user's info to perform unsubscription
-
-        //? can I use == here?
-        if(subscriptionARN != null){
-            // * this section finishes off the unsubscription proceess
-            UnsubscribeRequest unsubscribeRequest = new UnsubscribeRequest();
-            unsubscribeRequest.setSubscriptionArn(subscriptionARN);
-            snsClient.unsubscribe(unsubscribeRequest);    
-            return "Unsubscription was successful";        
-        }
-
-        return "Unsubscription failed"; 
+        // * this section finishes off the unsubscription proceess
+        UnsubscribeRequest unsubscribeRequest = new UnsubscribeRequest();
+        unsubscribeRequest.setSubscriptionArn(subscriptionARN);
+        this.snsClient.unsubscribe(unsubscribeRequest);    
 
 
-        //* notes on few things I'm learning
 
-        // * unsubscribe an email endpoint to SNS
-        //? why is it using final keyword here? --> this should not change --> are there other places where I should be using it
-        //* setting
 
-        //? how can I test for an expected output w/o fully deploying my code in the cloud? --> write some test cases which will run as you deploy  --> I bet there is a way to just run the test cases w/o deploying it
-
-        
-    
-        //* send user subscription 
     }
 
     // Publish a message to an Amazon SNS topic.
-    //! ARN & message should be parameters
-    public static void sendSNSNotifications(String subjectName, int CRN){
+    //! fixme - ARN & message should be req parameters
+    public void sendSNSNotifications(String subjectName, int CRN){
                 
-        AmazonSNS snsClient = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials( DefaultAWSCredentialsProviderChain.getInstance() ).build();
         final String msg = "If you receive this message, publishing a message to an Amazon SNS topic works: " + subjectName + " " + CRN;
         final String topicArn = "arn:aws:sns:us-east-1:796567501476:CourseNotificationTopic";
         final PublishRequest publishRequest = new PublishRequest(topicArn, msg);

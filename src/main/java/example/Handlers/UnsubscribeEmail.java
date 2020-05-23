@@ -1,6 +1,7 @@
 package example.Handlers;
 
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
@@ -17,11 +18,11 @@ public class UnsubscribeEmail implements RequestHandler<Map<String, Object>, Str
 
         // todo: get email from event object
         //* subscribe via email
-        Notifications subscriber = new Notifications();
+        Notifications subscriber = new Notifications(Regions.US_EAST_1);
         String topicARN = "arn:aws:sns:us-east-1:796567501476:CourseNotificationTopic";
-        String response = subscriber.unsubscribeUser(email, topicARN );
+        subscriber.unsubscribeUser(email, topicARN );
 
-        return response;
+        return "Unsubscription was successful";
     }
 
 }

@@ -2,11 +2,8 @@ package example.Handlers;
 
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.json.simple.JSONObject;
-
 import example.DynamoDB.DynamoDBClientFactory;
-
 import java.util.Map;
-
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.Context;
 
@@ -24,7 +21,7 @@ public class GetItem implements RequestHandler<Map<String, String> , JSONObject>
         // * call the class to perform write to DB (class constructor needs region & profile, and tableName)
         DynamoDBClientFactory client = new DynamoDBClientFactory(Regions.US_EAST_1, AWSprofile, tableName);
 
-        return client.searchClass(CRN);
+        return client.searchClassByCRN(CRN);
 
     }
 

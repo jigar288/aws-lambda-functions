@@ -5,7 +5,7 @@ Resources:
   UnsubscribeEmail:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/e2b53dcda1e58c45f0d54eac293b0698
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/8620f6a39b37fcf403798a33d22ae667
       Handler: example.Handlers.UnsubscribeEmail
       Runtime: java11
       Description: Java function
@@ -20,7 +20,7 @@ Resources:
   SubscribeEmail:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/e2b53dcda1e58c45f0d54eac293b0698
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/8620f6a39b37fcf403798a33d22ae667
       Handler: example.Handlers.SubscribeEmail
       Runtime: java11
       Description: Java function
@@ -35,7 +35,7 @@ Resources:
   WriteToDatabase:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/e2b53dcda1e58c45f0d54eac293b0698
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/8620f6a39b37fcf403798a33d22ae667
       Handler: example.Handlers.WriteToDatabase
       Runtime: java11
       Description: Java function
@@ -51,7 +51,7 @@ Resources:
   GetItem:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/e2b53dcda1e58c45f0d54eac293b0698
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/8620f6a39b37fcf403798a33d22ae667
       Handler: example.Handlers.GetItem
       Runtime: java11
       Description: Java function
@@ -66,7 +66,7 @@ Resources:
   ReadDatabase:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/e2b53dcda1e58c45f0d54eac293b0698
+      CodeUri: s3://lambda-artifacts-ea5006f47f340ae2/8620f6a39b37fcf403798a33d22ae667
       Handler: example.Handlers.ReadDatabase
       Runtime: java11
       Description: Java function
